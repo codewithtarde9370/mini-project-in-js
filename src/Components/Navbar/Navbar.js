@@ -55,7 +55,7 @@ function Navbar() {
           {navLinks.map(({ link, id }) => (
             <li
               key={id}
-              className="border-blue-50 px-4 cursor-pointer capitalize py-4 text-2xl"
+              className="px-4 py-4 text-2xl capitalize cursor-pointer text-gray-300 hover:text-blue-400 hover:scale-105 transition duration-200"
             >
               <Link
                 onClick={() => setNav(!nav)}
