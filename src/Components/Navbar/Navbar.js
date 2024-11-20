@@ -7,7 +7,7 @@ function Navbar() {
 
   const navLinks = [
     { id: 1, link: "home" },
-    { id: 2, link: "qrcode" },
+    { id: 2, link: "Qrcode" },
     { id: 3, link: "portfolio" },
     { id: 4, link: "experience" },
     { id: 5, link: "contact" },

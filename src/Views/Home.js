@@ -1,64 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import './Home.css';
-import Tweet from './../images/Daily Quote/twitter.png';
+import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
-function Home() {
-  const [quote, setQuote] = useState("Loading...");
-  const [author, setAuthor] = useState("Loading...");
-  const apiUrl = "https://quotes-api-self.vercel.app/quote";
+function RandomQuote() {
+  const [quote, setQuote] = useState(""); // State for the quote
+  const [author, setAuthor] = useState(""); // State for the author
+  const [isLoading, setIsLoading] = useState(false); // State for loading spinner
 
-  const getQuote = async () => {
+  // Function to fetch a random quote
+  const fetchRandomQuote = async () => {
+    setIsLoading(true); // Show loader
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch("https://quotes-api-self.vercel.app/quote");
+      if (!response.ok) throw new Error("Failed to fetch the quote.");
       const data = await response.json();
-      setQuote(data.content || "Quote not available.");
-      setAuthor(data.author || "Anonymous");
+      setQuote(data.quote || "No quote available.");
+      setAuthor(data.author || "Unknown");
+      toast.success("Quote fetched successfully!");
     } catch (error) {
-      console.error("Error fetching the quote:", error.message);
-      setQuote("Unable to fetch quote.");
-      setAuthor("Unknown");
+      toast.error("Failed to fetch a quote. Please try again.");
+    } finally {
+      setIsLoading(false); // Hide loader
     }
   };
 
-  useEffect(() => {
-    getQuote();
-  }, []);
-
   return (
-    <div className="bg-gray-100 h-screen w-full flex items-center justify-center">
-      <div className="w-96 p-8 rounded-lg shadow-xl bg-white relative">
-        <h2 className="text-center text-3xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-2 mb-4">
-          Quote of the Day
-        </h2>
-        <blockquote className="text-center text-lg italic text-gray-700 mb-4">
-          {quote === "Loading..." ? <span className="loader"></span> : `"${quote}"`}
-        </blockquote>
-        <span className="block text-right text-gray-500 text-sm">
-          - {author}
-        </span>
-        <div className="mt-6 flex justify-evenly">
-          <button
-            onClick={getQuote}
-            className="px-5 py-2 bg-blue-500 text-white font-medium rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-200"
-          >
-            New Quote
-          </button>
-          <button
-            className="flex items-center px-5 py-2 bg-blue-500 text-white font-medium rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-200"
-            onClick={() =>
-              window.open(
-                `https://twitter.com/intent/tweet?text="${quote}" - ${author}`,
-                "_blank"
-              )
-            }
-          >
-            <img className="h-5 w-5 mr-2" alt="Twitter icon" src={Tweet} />
-            Tweet
-          </button>
-        </div>
+    <div
+    name='home'  
+    className="bg-gradient-to-r from-teal-700 to-blue-700 min-h-screen flex flex-col items-center justify-center text-center"
+    >
+      {/* HotToast Notifications */}
+      <Toaster position="top-center" reverseOrder={false} />
+
+      {/* Title */}
+      <p className="text-white text-4xl mb-6 font-bold">
+        Random Quote Generator
+      </p>
+
+      {/* Quote Box */}
+      <div className="w-full max-w-xl p-8 bg-white rounded-lg shadow-lg">
+        {/* Loading Indicator */}
+        {isLoading ? (
+          <div className="text-teal-700 font-medium text-lg">
+            Fetching a new quote...
+          </div>
+        ) : (
+          <>
+            {/* Quote */}
+            <p className="text-gray-800 text-2xl font-semibold mb-4">
+              "{quote}"
+            </p>
+            {/* Author */}
+            <p className="text-gray-600 text-lg font-medium">
+              - {author}
+            </p>
+          </>
+        )}
+
+        {/* Fetch New Quote Button */}
+        <button
+          onClick={fetchRandomQuote}
+          className="mt-6 py-2 px-6 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-75 transition duration-200"
+        >
+          Get New Quote
+        </button>
       </div>
     </div>
   );
 }
 
-export default Home;
+export default RandomQuote;
