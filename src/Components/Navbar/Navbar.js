@@ -51,7 +51,7 @@ function Navbar() {
 
       {/* Mobile Navigation Menu */}
       {nav && (
-        <ul className="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-black to-gray-600 text-gray-300">
+        <ul className="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-blue-950 to-blue-300 text-gray-300">
           {navLinks.map(({ link, id }) => (
             <li
               key={id}
